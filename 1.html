@@ -1,0 +1,1480 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>집밥 나눔 식탁</title>
+    <style>
+      :root {
+        --bg: #f8f4eb;
+        --white: #fffdf8;
+        --ink: #232923;
+        --muted: #70766e;
+        --line: #dddccd;
+        --red: #ac4933;
+        --green: #40614f;
+        --soft: #e9eee7;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #ede9df;
+        color: var(--ink);
+        font:
+          15px/1.6 "Apple SD Gothic Neo",
+          "Malgun Gothic",
+          sans-serif;
+        word-break: keep-all;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #ac4933;
+        outline-offset: 3px;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      header {
+        max-width: 1100px;
+        margin: auto;
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      header b {
+        font:
+          700 23px "Batang",
+          serif;
+      }
+      .switch {
+        display: flex;
+        background: #deded2;
+        border-radius: 14px;
+        padding: 4px;
+        gap: 4px;
+      }
+      .switch button {
+        border: 0;
+        background: none;
+        border-radius: 10px;
+        padding: 9px 18px;
+      }
+      .switch .on {
+        background: var(--ink);
+        color: white;
+      }
+      .reset {
+        border: 0;
+        background: none;
+        color: var(--muted);
+        font-size: 12px;
+        text-decoration: underline;
+      }
+      .layout {
+        max-width: 990px;
+        margin: 14px auto 50px;
+        display: grid;
+        grid-template-columns: 420px 1fr;
+        gap: 50px;
+        align-items: start;
+        padding: 0 20px;
+      }
+      .phone {
+        height: 800px;
+        border: 9px solid #242a25;
+        border-radius: 36px;
+        background: var(--bg);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 25px 45px -30px #313a33;
+      }
+      .apphead {
+        padding: 24px 22px 16px;
+        border-bottom: 1px solid var(--line);
+      }
+      .eyebrow {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+      h1 {
+        font:
+          700 27px/1.35 "Batang",
+          serif;
+        margin: 5px 0;
+      }
+      h2 {
+        font-size: 19px;
+        line-height: 1.4;
+        margin: 8px 0;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 0 0 5px;
+      }
+      p {
+        margin: 8px 0;
+      }
+      .scroll {
+        overflow-y: auto;
+        flex: 1;
+        padding: 20px;
+      }
+      .scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .scroll::-webkit-scrollbar-thumb {
+        background: var(--line);
+        border-radius: 4px;
+      }
+      .hero {
+        background: var(--green);
+        color: #fff;
+        padding: 22px;
+        border-radius: 18px;
+        margin-bottom: 18px;
+      }
+      .hero h2 {
+        font:
+          700 24px/1.4 "Batang",
+          serif;
+      }
+      .hero p {
+        font-size: 13px;
+        opacity: 0.9;
+      }
+      .card {
+        background: var(--white);
+        border: 1px solid var(--line);
+        padding: 17px;
+        border-radius: 16px;
+        margin: 12px 0;
+      }
+      .card.confirmed {
+        border-color: var(--green);
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 11px;
+        line-height: 1.7;
+        border-radius: 7px;
+        background: var(--soft);
+        color: var(--green);
+        padding: 3px 8px;
+        margin: 0 4px 6px 0;
+      }
+      .tag.red {
+        background: #f5e5df;
+        color: var(--red);
+      }
+      .people {
+        display: flex;
+        gap: 6px;
+        margin: 12px 0;
+      }
+      .person {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--soft);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 13px;
+      }
+      .person.empty {
+        border: 1px dashed #b4b9ad;
+        background: none;
+        color: #9da696;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        border: 0;
+        border-radius: 11px;
+        padding: 13px 12px;
+        background: var(--ink);
+        color: white;
+        font-weight: 700;
+        margin: 12px 0 0;
+      }
+      .btn.accent {
+        background: var(--red);
+      }
+      .btn.light {
+        background: var(--soft);
+        color: var(--green);
+      }
+      .btn.outline {
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid var(--line);
+      }
+      .btn.small {
+        padding: 8px;
+        font-size: 12px;
+      }
+      .notice {
+        font-size: 12px;
+        line-height: 1.7;
+        background: #e9eee7;
+        padding: 12px 14px;
+        border-radius: 10px;
+        margin: 12px 0;
+      }
+      .mystery {
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px dashed #c0c5b5;
+        background: #f0f2e8;
+        margin: 12px 0;
+      }
+      .mystery b {
+        display: block;
+        font-size: 16px;
+      }
+      .mystery p {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      nav {
+        display: flex;
+        border-top: 1px solid var(--line);
+        padding: 10px 10px 16px;
+        background: var(--white);
+      }
+      nav button {
+        flex: 1;
+        border: 0;
+        background: none;
+        color: var(--muted);
+        font-size: 12px;
+        padding: 9px 2px;
+      }
+      nav button.on {
+        color: var(--red);
+        font-weight: 800;
+      }
+      label {
+        display: block;
+        margin: 16px 0 7px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px;
+        background: var(--white);
+        color: var(--ink);
+      }
+      textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .section {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+        margin: 22px 0 8px;
+      }
+      .empty-state {
+        padding: 24px 10px;
+        text-align: center;
+        color: var(--muted);
+      }
+      .msg {
+        background: var(--soft);
+        padding: 10px 12px;
+        border-radius: 10px;
+        margin: 8px 0;
+        font-size: 13px;
+      }
+      .aside {
+        padding: 30px 5px;
+      }
+      .aside h2 {
+        font:
+          700 28px/1.4 "Batang",
+          serif;
+      }
+      .aside p {
+        color: #666f62;
+        font-size: 14px;
+      }
+      .steps {
+        list-style: none;
+        padding: 0;
+        counter-reset: steps;
+      }
+      .steps li {
+        counter-increment: steps;
+        padding: 15px 0;
+        border-bottom: 1px solid #d0d4c7;
+        display: flex;
+        gap: 12px;
+        font-size: 14px;
+      }
+      .steps li:before {
+        content: counter(steps);
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        flex-shrink: 0;
+        background: var(--green);
+        color: white;
+        font-size: 12px;
+      }
+      .demo {
+        font-size: 12px;
+        padding: 15px;
+        border: 1px solid #c9cebf;
+        border-radius: 12px;
+        margin-top: 24px;
+        color: #5f675a;
+      }
+      .elder h1 {
+        font-size: 30px;
+      }
+      .elder .btn {
+        font-size: 19px;
+        padding: 17px;
+      }
+      .elder h3 {
+        font-size: 21px;
+      }
+      .elder .muted {
+        font-size: 15px;
+      }
+      .elder .scroll {
+        padding: 18px;
+      }
+      .back {
+        border: 0;
+        background: none;
+        color: var(--green);
+        padding: 0 0 8px;
+      }
+      .toast {
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--ink);
+        color: white;
+        padding: 12px 22px;
+        border-radius: 12px;
+        z-index: 20;
+        max-width: 90%;
+        box-shadow: 0 8px 24px #0002;
+      }
+      #toast:empty {
+        display: none;
+      }
+      .voice {
+        border: 1px solid #a6b4a2;
+        background: #e9eee7;
+        border-radius: 12px;
+        padding: 15px;
+      }
+      .voice .btn {
+        margin-top: 9px;
+      }
+      .check {
+        display: flex;
+        gap: 10px;
+        font-size: 12px;
+        align-items: flex-start;
+        margin-top: 18px;
+      }
+      .check input {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        margin-top: 3px;
+      }
+      @media (max-width: 800px) {
+        header {
+          flex-wrap: wrap;
+        }
+        .layout {
+          grid-template-columns: minmax(0, 420px);
+          justify-content: center;
+          gap: 10px;
+        }
+        .aside {
+          padding: 15px 8px;
+        }
+        .phone {
+          height: 810px;
+        }
+      }
+      @media (max-width: 450px) {
+        header b {
+          font-size: 20px;
+        }
+        .layout {
+          padding: 0 10px;
+        }
+        .phone {
+          border-width: 5px;
+          height: calc(100dvh - 145px);
+          min-height: 560px;
+          border-radius: 25px;
+        }
+        .apphead {
+          padding: 17px;
+        }
+        .scroll {
+          padding: 16px;
+        }
+        .switch button {
+          padding: 8px 12px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto;
+        }
+      }
+
+      .elder .apphead {
+        padding: 18px 22px;
+      }
+      .elder .btn {
+        min-height: 60px;
+        font-size: 21px;
+      }
+      .elder .scroll {
+        padding: 18px;
+      }
+      .elder .muted {
+        font-size: 16px;
+      }
+      .elder nav button {
+        font-size: 16px;
+      }
+      .callhead {
+        text-align: center;
+        padding: 12px 0;
+      }
+      .callbadge {
+        width: 65px;
+        height: 65px;
+        background: var(--green);
+        color: white;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 10px;
+        font-size: 23px;
+      }
+      .question {
+        font-size: 25px;
+        line-height: 1.55;
+        font-weight: 700;
+        margin: 15px 0;
+      }
+      .answer {
+        background: var(--white);
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        min-height: 64px;
+        font-size: 21px;
+        white-space: pre-wrap;
+      }
+      .tiny {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .stepdots {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        margin: 10px 0;
+      }
+      .stepdots i {
+        width: 22px;
+        height: 4px;
+        background: var(--line);
+        border-radius: 9px;
+      }
+      .stepdots i.on {
+        background: var(--green);
+      }
+      .status {
+        min-height: 24px;
+        font-size: 14px;
+        color: var(--green);
+      }
+      .dish {
+        font:
+          700 27px "Batang",
+          serif;
+        margin: 8px 0;
+      }
+      .elder input,
+      .elder textarea,
+      .elder select {
+        font-size: 20px;
+      }
+      .receipt {
+        background: var(--white);
+        padding: 15px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        font-size: 18px;
+      }
+      .reply {
+        background: #edf1e9;
+        padding: 12px;
+        border-radius: 10px;
+        margin: 8px 0;
+      }
+      .elder .hero h2 {
+        font-size: 28px;
+      }
+      .note-item {
+        padding: 14px;
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <b>집밥 나눔 식탁</b>
+      <div class="switch">
+        <button id="youthSwitch" onclick="switchRole('youth')">청년 버전</button
+        ><button id="elderSwitch" onclick="switchRole('elder')">
+          어르신 버전
+        </button>
+      </div>
+      <button class="reset" onclick="resetDemo()">데모 초기화</button>
+    </header>
+    <main class="layout">
+      <section class="phone" id="phone" aria-label="앱 프로토타입"></section>
+      <aside class="aside">
+        <div class="eyebrow">말로 차리는 동네 식탁</div>
+        <h2>“같이 밥 먹을 사람,<br />여기 모여요.”</h2>
+        <p>
+          어르신이 메뉴·공공장소·시간을 말하면, 전화처럼 묻고 확인하는 음성
+          도우미가 모집글 작성을 돕습니다. 청년은 메뉴와 어르신 소개를 보고
+          신청합니다.
+        </p>
+        <ol class="steps">
+          <li>어르신 버전 → 간단하게 밥상 열기</li>
+          <li>예전 기록 불러오기 → 날짜 확인 후 게시</li>
+          <li>청년 버전 → 밥상 보기 → 참여 신청</li>
+          <li>어르신 버전 → 소식 듣기</li>
+        </ol>
+        <div class="demo">
+          <b>음성 기능 안내</b><br />앱 안의 전화형 안내이며 실제 전화는 걸리지
+          않습니다. 음성 인식은 지원 브라우저에서 마이크 권한을 허용해야
+          동작하며 환경에 따라 외부 음성 처리 서비스가 사용될 수 있습니다.
+          지원되지 않으면 직접 입력 또는 명시된 예시 답변으로 시연하세요.<br /><br />낭독은
+          기기의 한국어 음성, 글 정리는 입력값을 조합하는 규칙 기반입니다. 실제
+          AI 모델·본인/동네/생일 인증·서버 알림은 미연결입니다. 날씨는 직접
+          선택하고, 통계는 이 기기에서 입력된 선호 투표만 집계합니다.
+          인물·장소는 예시이고 데이터는 이 브라우저에 저장됩니다. 실제 장소의
+          이용 승인을 뜻하지 않습니다.
+        </div>
+      </aside>
+    </main>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script>
+      const KEY = "jipbap-voice-host-v4";
+      const VENUES = [
+        "마을회관 공동부엌 (예시)",
+        "주민센터 조리실 (예시)",
+        "이용 협의된 경로당 (예시)",
+      ];
+      const initial = () => ({
+        profile: {
+          nick: "정다운손맛",
+          intro: "함께 요리하며 동네 이야기를 나누고 싶어요.",
+          specialty: "된장찌개와 나물무침",
+        },
+        tables: [
+          {
+            id: "t1",
+            menu: "된장찌개와 계란말이",
+            venue: VENUES[0],
+            date: "2026-11-12",
+            time: "18:00",
+            capacity: 4,
+            host: "정다운손맛",
+            intro: "함께 요리하며 동네 이야기를 나누고 싶어요.",
+            members: [{ nick: "동네친구", needs: "매운 음식은 어려워요." }],
+            comments: [],
+            mine: false,
+            own: true,
+          },
+        ],
+        news: [],
+      });
+      let data;
+      try {
+        data = JSON.parse(localStorage.getItem(KEY)) || initial();
+      } catch (e) {
+        data = initial();
+      }
+      let role = "elder",
+        page = "home",
+        selected = null,
+        flow = null,
+        recognition = null,
+        reading = false,
+        toastTimer,
+        autoVoice = false;
+      const $ = (id) => document.getElementById(id),
+        table = (id) => data.tables.find((t) => t.id === id);
+      const esc = (v) =>
+        String(v ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      function toast(t) {
+        $("toast").textContent = t;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => ($("toast").textContent = ""), 3500);
+      }
+      function save() {
+        try {
+          localStorage.setItem(KEY, JSON.stringify(data));
+        } catch (e) {
+          toast("저장할 수 없어 현재 화면에서만 유지됩니다.");
+        }
+      }
+      function stopAudio() {
+        if (recognition) {
+          recognition.onend = null;
+          recognition.abort();
+          recognition = null;
+        }
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+      }
+      function switchRole(r) {
+        stopAudio();
+        role = r;
+        page = "home";
+        flow = null;
+        render();
+      }
+      function go(p, id = null) {
+        stopAudio();
+        page = p;
+        selected = id;
+        flow = null;
+        render();
+      }
+      function resetDemo() {
+        if (!confirm("시연 데이터를 초기화할까요?")) return;
+        stopAudio();
+        data = initial();
+        save();
+        page = "home";
+        flow = null;
+        render();
+      }
+      function speak(text, done) {
+        if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
+          toast(
+            "이 기기는 음성 낭독을 지원하지 않습니다. 화면의 글을 확인해주세요.",
+          );
+          if (done) done();
+          return;
+        }
+        window.speechSynthesis.cancel();
+        const u = new window.SpeechSynthesisUtterance(text);
+        u.lang = "ko-KR";
+        u.rate = 0.88;
+        u.onend = () => {
+          if (done) done();
+        };
+        u.onerror = () => {
+          toast("음성을 재생하지 못했습니다. 다시 듣기를 눌러주세요.");
+          if (done) done();
+        };
+        window.speechSynthesis.speak(u);
+      }
+      function when(t) {
+        return t.date.slice(5).replace("-", "월 ") + "일 " + t.time;
+      }
+      function nav() {
+        const tabs =
+          role === "elder"
+            ? [
+                ["home", "처음"],
+                ["news", "소식 듣기"],
+                ["profile", "내 소개"],
+              ]
+            : [
+                ["home", "동네 밥상"],
+                ["mine", "내 약속"],
+                ["profile", "마이"],
+              ];
+        return (
+          "<nav>" +
+          tabs
+            .map(
+              ([k, v]) =>
+                `<button class="${page === k ? "on" : ""}" onclick="go('${k}')">${v}</button>`,
+            )
+            .join("") +
+          "</nav>"
+        );
+      }
+      function card(t) {
+        return `<article class="card"><div class="row"><span class="tag">${t.members.length >= t.capacity ? "모집 마감" : "함께할 이웃 모집"}</span><span class="muted">청년 ${t.members.length}/${t.capacity}명</span></div><div class="dish">${esc(t.menu)}</div><p class="muted">${esc(when(t))}<br>${esc(t.venue)}</p><p class="muted">${esc(t.host)} · 활동 동네 죽도동</p><button class="btn" onclick="go('detail','${t.id}')">${role === "elder" ? "모인 청년 확인하기" : "밥상과 어르신 소개 보기"}</button></article>`;
+      }
+      function home() {
+        if (role === "youth")
+          return `<div class="hero"><h2>누군가의 손맛,<br>우리 동네에서 함께.</h2><p>어르신이 연 밥상에 신청하고, 함께 만들고 먹어요.</p></div>${data.tables.map(card).join("")}`;
+        return `<div class="hero"><h2>${esc(data.profile.nick)}님,<br>오늘도 반가워요.</h2><p>글을 쓰지 않아도 괜찮아요.<br>지난 밥상을 불러오면 더 빨라요.</p></div><button class="btn accent" onclick="openQuick()">간단하게 밥상 열기</button><button class="btn light" onclick="listenHome()">오늘 소식 들려줘요</button><button class="btn outline" onclick="startFlow('profile')">말로 내 소개 만들기</button><p class="tiny">앱 안에서 진행하는 음성 안내 · 실제 전화 아님</p><div class="section">내가 연 밥상</div>${data.tables
+          .filter((t) => t.own)
+          .map(card)
+          .join("")}`;
+      }
+      const TABLE_STEPS = [
+        {
+          key: "menu",
+          q: "어떤 집밥을 함께 만들고 싶으세요?",
+          example: "된장찌개와 계란말이",
+          type: "text",
+        },
+        {
+          key: "venue",
+          q: "어디서 만날까요? 이용 가능한 공동장소를 골라주세요.",
+          example: VENUES[0],
+          type: "venue",
+        },
+        {
+          key: "date",
+          q: "몇 월 며칠에 만날까요?",
+          example: "2026-11-15",
+          type: "date",
+        },
+        { key: "time", q: "몇 시에 만날까요?", example: "18:00", type: "time" },
+        {
+          key: "capacity",
+          q: "청년을 몇 분 초대할까요? 두 분부터 네 분까지예요.",
+          example: "4",
+          type: "number",
+        },
+      ];
+      const PROFILE_STEPS = [
+        {
+          key: "nick",
+          q: "동네에서 어떤 이름으로 불리면 좋을까요?",
+          example: "정다운손맛",
+          type: "text",
+        },
+        {
+          key: "intro",
+          q: "청년들에게 들려줄 짧은 자기소개를 말씀해주세요.",
+          example: "사람들과 요리하고 이야기 나누는 걸 좋아해요.",
+          type: "text",
+        },
+        {
+          key: "specialty",
+          q: "어떤 음식을 잘 만드시나요?",
+          example: "된장찌개와 제철 나물무침",
+          type: "text",
+        },
+      ];
+      function steps() {
+        return flow.kind === "table" ? TABLE_STEPS : PROFILE_STEPS;
+      }
+      function startFlow(kind) {
+        stopAudio();
+        flow = { kind, step: 0, answers: {}, confirming: false };
+        page = "voice";
+        autoVoice = true;
+        render();
+        readQuestion();
+      }
+      function stepValue() {
+        const st = steps()[flow.step];
+        return flow.answers[st.key] ?? "";
+      }
+      function question() {
+        return steps()[flow.step].q;
+      }
+      function readQuestion() {
+        if (flow) speak(flow.confirming ? summary() : question());
+      }
+      function voicePage() {
+        const st = steps()[flow.step],
+          value = stepValue();
+        if (flow.confirming) return confirmPage();
+        const control =
+          st.type === "venue"
+            ? `<select id="answer" onchange="captureAnswer()"><option value="">장소를 선택해주세요</option>${VENUES.map((v) => `<option ${value === v ? "selected" : ""}>${esc(v)}</option>`).join("")}</select>`
+            : `<${st.key === "intro" ? "textarea" : "input"} id="answer" ${st.key === "intro" ? "" : `type="${st.type === "date" ? "date" : st.type === "time" ? "time" : st.type === "number" ? "number" : "text"}" ${st.type === "number" ? 'min="2" max="4" step="1"' : ""}`} oninput="captureAnswer()" ${st.key === "intro" ? "" : `value="${esc(value)}"`} placeholder="말씀하거나 직접 입력하세요">${st.key === "intro" ? esc(value) + "</textarea>" : ""}`;
+        return `<div class="callhead"><div class="callbadge">집밥</div><span class="tag">전화처럼 대화하는 안내</span><div class="stepdots">${steps()
+          .map((_, i) => `<i class="${i <= flow.step ? "on" : ""}"></i>`)
+          .join(
+            "",
+          )}</div></div><div class="question">${esc(st.q)}</div><button class="btn light" onclick="readQuestion()">질문 다시 듣기</button><div id="voiceStatus" class="status" role="status">천천히 말씀해도 괜찮아요.</div><label for="answer">내 답변</label>${control}<button id="micButton" class="btn accent" onclick="listen()">눌러서 말하기</button><button class="btn outline" onclick="exampleAnswer()">시연용 예시 답변</button><button class="btn" onclick="nextStep()">${flow.step === steps().length - 1 ? "전체 내용 확인" : "다음으로"}</button><div class="row"><button class="back" onclick="previousStep()">${flow.step ? "← 이전 질문" : "← 나가기"}</button><button class="back" onclick="go('home')">그만하기</button></div><p class="tiny">마이크를 누를 때만 음성 인식을 시작합니다. 권한이 필요하며 지원 여부는 브라우저마다 다릅니다. 예시는 실제 인식 결과가 아닙니다.</p>`;
+      }
+      function captureAnswer() {
+        if (flow && !flow.confirming && $("answer"))
+          flow.answers[steps()[flow.step].key] = $("answer").value;
+      }
+      function exampleAnswer() {
+        flow.answers[steps()[flow.step].key] = steps()[flow.step].example;
+        render();
+        $("voiceStatus").textContent =
+          "시연용 예시가 입력됐어요. 확인하고 다음으로 가세요.";
+      }
+      function parseSpeech(raw, st) {
+        const text = raw.trim();
+        if (st.type === "venue") {
+          const found = VENUES.find((v) => text.includes(v.split(" ")[0]));
+          return found || null;
+        }
+        if (st.type === "date") {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(text)) return text;
+          const m = text.match(/(?:(\d{4})년\s*)?(\d{1,2})월\s*(\d{1,2})일/);
+          if (m) {
+            const year = m[1] || new Date().getFullYear();
+            const value = `${year}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}`;
+            const d = new Date(value + "T12:00:00");
+            if (d.getMonth() + 1 === +m[2] && d.getDate() === +m[3])
+              return value;
+          }
+          return null;
+        }
+        if (st.type === "time") {
+          const norm = text
+            .replace(/여섯/g, "6")
+            .replace(/열두/g, "12")
+            .replace(/열한/g, "11")
+            .replace(/일곱/g, "7")
+            .replace(/여덟/g, "8")
+            .replace(/아홉/g, "9")
+            .replace(/다섯/g, "5")
+            .replace(/네 시/g, "4시")
+            .replace(/세 시/g, "3시")
+            .replace(/두 시/g, "2시")
+            .replace(/한 시/g, "1시");
+          const m = norm.match(/(\d{1,2})\s*시(?:\s*(\d{1,2})\s*분)?/);
+          if (!m) return /^\d{2}:\d{2}$/.test(text) ? text : null;
+          let h = +m[1];
+          if (
+            h < 1 ||
+            h > 12 ||
+            !(
+              norm.includes("오전") ||
+              norm.includes("오후") ||
+              norm.includes("저녁")
+            )
+          )
+            return null;
+          if ((norm.includes("오후") || norm.includes("저녁")) && h < 12)
+            h += 12;
+          if (norm.includes("오전") && h === 12) h = 0;
+          let min = norm.includes("반") ? 30 : +(m[2] || 0);
+          if (min > 59) return null;
+          return (
+            String(h).padStart(2, "0") + ":" + String(min).padStart(2, "0")
+          );
+        }
+        if (st.type === "number") {
+          if (/[234]/.test(text)) return text.match(/[234]/)[0];
+          if (/두|둘/.test(text)) return "2";
+          if (/세|셋/.test(text)) return "3";
+          if (/네|넷/.test(text)) return "4";
+          return null;
+        }
+        return text || null;
+      }
+      function listen() {
+        if (!flow || flow.confirming) return;
+        stopAudio();
+        const Recognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!Recognition) {
+          $("voiceStatus").textContent =
+            "음성 인식 미지원: 직접 입력하거나 시연용 예시를 눌러주세요.";
+          return;
+        }
+        const st = steps()[flow.step],
+          active = flow;
+        try {
+          recognition = new Recognition();
+          recognition.lang = "ko-KR";
+          recognition.interimResults = false;
+          recognition.continuous = false;
+          recognition.onstart = () => {
+            if ($("voiceStatus"))
+              $("voiceStatus").textContent =
+                "듣고 있어요. 마치면 잠시 기다려주세요.";
+          };
+          recognition.onresult = (e) => {
+            if (flow !== active) return;
+            const raw = e.results[0][0].transcript;
+            const value = parseSpeech(raw, st);
+            if (!value) {
+              $("voiceStatus").textContent =
+                "들린 말: " +
+                raw +
+                " — 정확하게 정하지 못했어요. 직접 선택하거나 다시 말씀해주세요.";
+              return;
+            }
+            flow.answers[st.key] = value;
+            render();
+            $("voiceStatus").textContent =
+              "이렇게 들었어요: " + raw + " — 맞는지 확인해주세요.";
+          };
+          recognition.onerror = (e) => {
+            if ($("voiceStatus"))
+              $("voiceStatus").textContent =
+                "음성 인식 오류 (" +
+                e.error +
+                "). 직접 입력하거나 예시를 사용해주세요.";
+          };
+          recognition.onend = () => {
+            recognition = null;
+          };
+          recognition.start();
+        } catch (e) {
+          $("voiceStatus").textContent =
+            "마이크를 시작하지 못했어요. 직접 입력해주세요.";
+        }
+      }
+      function valid(st, value) {
+        if (!String(value).trim()) return false;
+        if (st.type === "venue") return VENUES.includes(value);
+        if (st.type === "number")
+          return Number.isInteger(+value) && +value >= 2 && +value <= 4;
+        if (st.type === "date")
+          return (
+            /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+            !isNaN(new Date(value).getTime())
+          );
+        if (st.type === "time") return /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+        return true;
+      }
+      function nextStep() {
+        captureAnswer();
+        const st = steps()[flow.step];
+        if (!valid(st, flow.answers[st.key] || ""))
+          return toast(
+            "답변을 확인해주세요. 인원은 2~4명, 장소는 목록에서 선택해요.",
+          );
+        stopAudio();
+        if (flow.step < steps().length - 1) flow.step++;
+        else flow.confirming = true;
+        render();
+        readQuestion();
+      }
+      function previousStep() {
+        stopAudio();
+        captureAnswer();
+        if (flow.step === 0) return go("home");
+        flow.step--;
+        render();
+        readQuestion();
+      }
+      function summary() {
+        const a = flow.answers;
+        return flow.kind === "profile"
+          ? `이름은 ${a.nick}. 자기소개는 ${a.intro}. 자신 있는 음식은 ${a.specialty}. 이대로 저장할까요?`
+          : `${a.menu}. ${a.date} ${a.time}, ${a.venue}에서 청년 ${a.capacity}분을 모집합니다. 자택이 아닌 공동장소입니다. 이대로 올릴까요?`;
+      }
+      function confirmPage() {
+        return `<div class="callhead"><div class="callbadge">확인</div></div><div class="question">이렇게 ${flow.kind === "profile" ? "소개할까요?" : "밥상을 열까요?"}</div><div class="receipt">${esc(summary())}</div><button class="btn light" onclick="readQuestion()">전체 내용 다시 듣기</button>${flow.kind === "table" ? '<div class="notice">장소 예약·조리 가능 여부는 별도 확인이 필요합니다. 청년의 알레르기는 신청 뒤 확인해요. 실제 운영에서는 운영자 확인을 거쳐 게시하세요.</div>' : ""}<button class="btn accent" onclick="commitFlow()">${flow.kind === "profile" ? "네, 저장해요" : "네, 모집글 올려요"}</button><button class="btn outline" onclick="editFlow()">내용 고치기</button><button class="back" onclick="go('home')">취소하고 처음으로</button>`;
+      }
+      function editFlow() {
+        flow.step = 0;
+        flow.confirming = false;
+        stopAudio();
+        render();
+        readQuestion();
+      }
+      function commitFlow() {
+        if (!flow || !flow.confirming) return;
+        for (const st of steps())
+          if (!valid(st, flow.answers[st.key] || ""))
+            return toast("내용을 다시 확인해주세요.");
+        const kind = flow.kind,
+          a = flow.answers;
+        stopAudio();
+        if (kind === "profile") {
+          data.profile = { ...data.profile, ...a };
+          data.tables
+            .filter((t) => t.own)
+            .forEach((t) => {
+              t.host = a.nick;
+              t.intro = a.intro;
+            });
+          save();
+          go("profile");
+          speak("내 소개를 저장했습니다. 청년들에게 이 소개가 보여요.");
+        } else {
+          data.tables.unshift({
+            id: "t" + Date.now(),
+            ...a,
+            capacity: +a.capacity,
+            host: data.profile.nick,
+            intro: data.profile.intro,
+            members: [],
+            comments: [],
+            mine: false,
+            own: true,
+          });
+          save();
+          go("home");
+          speak(
+            "모집글을 올렸습니다. 청년들이 신청하면 소식에서 알려드릴게요.",
+          );
+        }
+      }
+      function detail() {
+        const t = table(selected);
+        return `<button class="back" onclick="go('home')">← 밥상 목록</button><div class="dish">${esc(t.menu)}</div><div class="card"><h3>${esc(when(t))}</h3><p>${esc(t.venue)}</p><p class="muted">청년 ${t.members.length}/${t.capacity}명 · 어르신 별도 참석</p></div><div class="section">함께할 어르신</div><div class="card"><h3>${esc(t.host)}</h3><span class="tag">활동 동네 · 죽도동</span><p>${esc(t.intro)}</p></div><div class="notice">공동장소에서 함께 만들고 먹어요. 가정집 방문은 없습니다. 조리 전 알레르기와 재료를 반드시 확인해주세요.</div>${role === "youth" ? `<form onsubmit="joinTable(event,'${t.id}')"><label for="needs">알레르기·못 먹는 재료</label><textarea id="needs" required placeholder="없으면 ‘없음’이라고 적어주세요."></textarea><button class="btn accent" ${t.mine || t.members.length >= t.capacity ? "disabled" : ""}>${t.mine ? "이미 신청했어요" : t.members.length >= t.capacity ? "모집이 마감됐어요" : "함께 밥 먹기 신청"}</button></form>${t.mine ? `<button class="btn outline" onclick="openCancellation('${t.id}')">참여 취소하기</button>` : ""}` : `<button class="btn light" onclick="readMembers('${t.id}')">신청한 청년들 들려줘요</button>${t.members.map((m) => `<div class="reply"><b>${esc(m.nick)}</b><br>${esc(m.needs)}</div>`).join("") || '<p class="muted">아직 신청한 청년이 없어요.</p>'}`}<div class="section">밥상 이야기</div>${t.comments.map((c) => `<div class="reply"><b>${esc(c.nick)}</b><p>${esc(c.text)}</p></div>`).join("") || '<p class="muted">아직 인사가 없어요.</p>'}<form onsubmit="addComment(event,'${t.id}')"><label for="comment">인사 남기기</label><input id="comment" required maxlength="200" placeholder="그날 뵙겠습니다!"><button class="btn light">인사 보내기</button></form>`;
+      }
+      function joinTable(e, id) {
+        e.preventDefault();
+        const t = table(id),
+          needs = $("needs").value.trim();
+        if (t.mine || t.members.length >= t.capacity) return;
+        if (!needs) return toast("식재료 제한을 알려주세요.");
+        t.members.push({ id: "current-youth", nick: "집밥친구", needs });
+        t.mine = true;
+        data.news.unshift({
+          id: "n" + Date.now(),
+          tableId: id,
+          text: `집밥친구님이 ${t.menu} 밥상에 신청했습니다. 못 먹는 재료에 대한 말씀은 ${needs} 입니다.`,
+        });
+        save();
+        render();
+        toast("참여 신청을 보냈습니다. 어르신 소식에도 반영됩니다.");
+      }
+      function openCancellation(id) {
+        if (role !== "youth" || !table(id)?.mine) return;
+        stopAudio();
+        page = "cancel";
+        selected = id;
+        render();
+      }
+      function cancellationPage() {
+        const t = table(selected);
+        if (!t?.mine) return "<p>취소할 참여 신청이 없습니다.</p>";
+        return `<button class="back" onclick="go('detail','${t.id}')">← 밥상으로 돌아가기</button><h2>참여를 취소할까요?</h2><div class="card"><h3>${esc(t.menu)}</h3><p class="muted">${esc(when(t))}<br>${esc(t.venue)}</p></div><form onsubmit="cancelParticipation(event,'${t.id}')"><label for="cancelReason">취소 사유 · 필수</label><textarea id="cancelReason" required maxlength="300" placeholder="예: 갑자기 근무 일정이 바뀌어 참석하기 어려워졌습니다."></textarea><div class="notice">사유는 어르신 소식에 전달되며, 다른 청년에게는 공개하지 않습니다. 건강정보 등 자세한 개인정보는 적지 않아도 됩니다.<br>취소하면 빈자리가 다시 모집됩니다.</div><button class="btn accent">사유 전달하고 참여 취소</button><button type="button" class="btn outline" onclick="go('detail','${t.id}')">아니요, 참여할게요</button></form>`;
+      }
+      function cancelParticipation(e, id) {
+        e.preventDefault();
+        if (role !== "youth") return;
+        const t = table(id);
+        if (!t?.mine) return toast("이미 취소됐거나 신청한 밥상이 아닙니다.");
+        const reason = $("cancelReason").value.trim();
+        if (!reason) return toast("취소 사유를 적어주세요.");
+        if (reason.length > 300)
+          return toast("취소 사유는 300자 이내로 적어주세요.");
+        if (!confirm("사유를 어르신께 전달하고 참여를 취소할까요?")) return;
+        let idx = t.members.findIndex((m) => m.id === "current-youth");
+        if (idx < 0) idx = t.members.findIndex((m) => m.nick === "집밥친구");
+        if (idx < 0) return toast("신청 내역을 찾을 수 없습니다.");
+        t.members.splice(idx, 1);
+        t.mine = false;
+        (t.cancellations || (t.cancellations = [])).push({
+          reason,
+          at: new Date().toISOString(),
+        });
+        data.news.unshift({
+          id: "n" + Date.now(),
+          tableId: id,
+          text: `집밥친구님이 ${t.menu} 밥상 참여를 취소했습니다. 취소 사유는 ${reason} 입니다. 빈자리 한 명을 다시 모집합니다.`,
+        });
+        save();
+        go("detail", id);
+        toast("참여를 취소하고 어르신께 사유를 전했습니다.");
+      }
+      function addComment(e, id) {
+        e.preventDefault();
+        const t = table(id),
+          text = $("comment").value.trim();
+        if (!text) return;
+        t.comments.push({
+          nick: role === "elder" ? data.profile.nick : "집밥친구",
+          text,
+        });
+        if (role === "youth")
+          data.news.unshift({
+            id: "n" + Date.now(),
+            tableId: id,
+            text: "집밥친구님의 인사입니다. " + text,
+          });
+        save();
+        render();
+        toast("인사를 보냈습니다.");
+      }
+      function readMembers(id) {
+        const t = table(id);
+        speak(
+          t.members.length
+            ? `${t.menu} 밥상에 ${t.members.length}명이 신청했습니다. ` +
+                t.members
+                  .map((m) => m.nick + "님. 식재료 제한은 " + m.needs)
+                  .join(". ")
+            : "아직 신청한 청년이 없어요. 다음에 다시 확인해주세요.",
+        );
+      }
+      function listenHome() {
+        speak(
+          data.news.length
+            ? `새로운 소식 ${data.news.length}개입니다. ` +
+                data.news.map((n) => n.text).join(". ")
+            : "아직 새로운 소식이 없어요. 밥상을 열면 청년들이 신청할 수 있어요.",
+        );
+      }
+      function newsPage() {
+        return `<button class="btn light" onclick="listenHome()">모든 소식 들려줘요</button>${data.news.map((n, i) => `<div class="note-item"><p>${esc(n.text)}</p><button class="btn" onclick="readNews(${i})">이 소식 듣기</button></div>`).join("") || '<p class="muted">아직 새로운 소식이 없습니다.</p>'}`;
+      }
+      function readNews(i) {
+        speak(data.news[i].text);
+      }
+      function profile() {
+        if (role === "youth")
+          return `<div class="card"><h2>집밥친구</h2><span class="tag">활동 동네 · 죽도동</span><p class="muted">본인·동네 인증은 시연용 표시이며 실제 인증은 연결되지 않았습니다.</p></div><div class="notice">집 주소와 연락처는 공개하지 않습니다. 닉네임과 활동 동네만 보여요.</div>`;
+        return `<div class="card"><span class="tag">청년에게 보여지는 내 소개</span><h2>${esc(data.profile.nick)}</h2><p>${esc(data.profile.intro)}</p><div class="section">자신 있는 집밥</div><p>${esc(data.profile.specialty)}</p><span class="tag">활동 동네 · 죽도동</span></div><button class="btn accent" onclick="startFlow('profile')">말로 내 소개 바꾸기</button><button class="btn light" onclick="readProfile()">내 소개 들려줘요</button><div class="notice">처음 가입과 본인·동네 확인은 운영자의 도움을 받는 방식으로 설계했습니다. 이 화면에서는 실제 인증을 수행하지 않습니다.</div>`;
+      }
+      function readProfile() {
+        speak(
+          data.profile.nick +
+            "님의 소개입니다. " +
+            data.profile.intro +
+            ". 자신 있는 음식은 " +
+            data.profile.specialty +
+            "입니다.",
+        );
+      }
+      function render() {
+        const titles = {
+          home: role === "elder" ? "반가워요, 어르신" : "우리 동네 집밥",
+          voice: flow?.kind === "profile" ? "내 소개 만들기" : "말로 밥상 열기",
+          detail: "함께하는 밥상",
+          profile: "내 소개",
+          mine: "내가 신청한 밥상",
+          news: "새로운 소식",
+          cancel: "참여 취소",
+          quick: "간단하게 밥상 열기",
+        };
+        let content;
+        if (page === "quick") content = quickPage();
+        else if (page === "cancel" && role === "youth")
+          content = cancellationPage();
+        else if (page === "voice" && flow) content = voicePage();
+        else if (page === "detail" && table(selected)) content = detail();
+        else if (page === "profile") content = profile();
+        else if (page === "news") content = newsPage();
+        else if (page === "mine")
+          content =
+            data.tables
+              .filter((t) => t.mine)
+              .map(card)
+              .join("") || '<p class="muted">아직 신청한 밥상이 없어요.</p>';
+        else content = home();
+        $("phone").className = "phone " + (role === "elder" ? "elder" : "");
+        $("phone").innerHTML =
+          `<div class="apphead"><div class="eyebrow">${role === "elder" ? "어르신" : "청년"} 버전 · 집밥 나눔 식탁</div><h1>${titles[page] || titles.home}</h1></div><div class="scroll">${content}</div>${page === "voice" ? "" : nav()}`;
+        $("youthSwitch").className = role === "youth" ? "on" : "";
+        $("elderSwitch").className = role === "elder" ? "on" : "";
+      }
+
+      data.votes = data.votes || [];
+      data.birthdays = data.birthdays || {};
+      let weather = "cold",
+        quickDraft = null;
+      const WEATHER = { cold: "추운 날", rain: "비 오는 날", clear: "맑은 날" };
+      const FOOD = {
+        cold: ["팥죽", "따뜻한 국밥", "된장찌개"],
+        rain: ["김치찌개", "수제비", "부침개"],
+        clear: ["비빔밥", "제철 나물밥", "볶음밥"],
+      };
+      function tomorrow() {
+        const d = new Date();
+        d.setDate(d.getDate() + 1);
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      }
+      function defaults() {
+        return {
+          menu: "",
+          venue: VENUES[0],
+          date: tomorrow(),
+          time: "18:00",
+          capacity: 4,
+        };
+      }
+      function openQuick() {
+        stopAudio();
+        quickDraft = defaults();
+        page = "quick";
+        render();
+        speak(
+          "지난 밥상을 누르면 메뉴와 장소를 가져와요. 날짜를 확인하고 모집글을 올려주세요.",
+        );
+      }
+      function retainQuick() {
+        if (page !== "quick" || !$("qmenu")) return;
+        quickDraft = {
+          menu: $("qmenu").value,
+          venue: $("qvenue").value,
+          date: $("qdate").value,
+          time: $("qtime").value,
+          capacity: Number($("qcapacity").value),
+        };
+      }
+      function useHistory(id) {
+        const t = table(id);
+        quickDraft = {
+          menu: t.menu,
+          venue: t.venue,
+          date: tomorrow(),
+          time: t.time,
+          capacity: t.capacity,
+        };
+        render();
+        toast(
+          "메뉴·장소·시간·인원을 가져왔어요. 날짜는 내일로 설정했으니 확인해주세요.",
+        );
+        speak(
+          "지난 밥상을 불러왔어요. 날짜는 내일로 바꿨어요. 확인하고 올려주세요.",
+        );
+      }
+      function changeWeather(v) {
+        retainQuick();
+        weather = v;
+        render();
+      }
+      function weatherPanel() {
+        const votes = data.votes.filter((v) => v.weather === weather);
+        const counts = {};
+        votes.forEach((v) => (counts[v.menu] = (counts[v.menu] || 0) + 1));
+        const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+        return `<div class="card"><h3>날씨 따라 어떤 집밥?</h3><select aria-label="날씨 상황" onchange="changeWeather(this.value)">${Object.entries(
+          WEATHER,
+        )
+          .map(
+            ([k, v]) =>
+              `<option value="${k}" ${k === weather ? "selected" : ""}>${v}</option>`,
+          )
+          .join(
+            "",
+          )}</select><p class="tiny">실시간 날씨 아님 · 직접 선택한 상황</p>${votes.length ? `<div class="section">이 기기의 선호 투표 ${votes.length}명 · 1인 1표</div>${rows.map(([m, n]) => `<p><b>${esc(m)}</b> ${n}표 / ${votes.length}표 (${Math.round((n / votes.length) * 100)}%)</p>`).join("")}<p class="tiny">이 프로토타입의 역할별 계정 투표만 집계한 값이며, 지역 전체 통계가 아닙니다.</p>` : '<div class="notice">아직 모인 투표가 없어요.<br>아래 음식은 <b>통계가 아닌 예시 추천</b>입니다.</div>'}<div class="section">${role === "youth" ? "이런 날 먹고 싶은 집밥에 투표해요" : "예시 메뉴를 눌러 모집글에 넣어요"}</div>${FOOD[weather].map((m) => `<button class="btn ${role === "youth" ? "light" : "outline"}" onclick="${role === "youth" ? `voteFood('${m}')` : `pickFood('${m}')`}">${esc(m)}${role === "youth" ? " · 투표" : ""}</button>`).join("")}</div>`;
+      }
+      function voteFood(menu) {
+        const user = "current-youth";
+        data.votes = data.votes.filter(
+          (v) => !(v.user === user && v.weather === weather),
+        );
+        data.votes.push({ user, weather, menu });
+        save();
+        render();
+        toast("투표를 반영했어요. 같은 날씨에 다시 고르면 기존 표가 바뀝니다.");
+      }
+      function pickFood(menu) {
+        if (page !== "quick") {
+          quickDraft = defaults();
+          page = "quick";
+        } else retainQuick();
+        quickDraft.menu = menu;
+        render();
+        toast("메뉴에 넣었어요. 나머지 약속을 확인해주세요.");
+      }
+      function readWeather() {
+        const votes = data.votes.filter((v) => v.weather === weather);
+        if (!votes.length)
+          return speak(
+            WEATHER[weather] +
+              "에 대한 투표가 아직 없어요. 예시 추천은 " +
+              FOOD[weather].join(", ") +
+              "입니다. 실제 통계가 아닙니다.",
+          );
+        const count = {};
+        votes.forEach((v) => (count[v.menu] = (count[v.menu] || 0) + 1));
+        speak(
+          WEATHER[weather] +
+            "에 대한 이 기기의 선호 투표 " +
+            votes.length +
+            "표입니다. " +
+            Object.entries(count)
+              .map(([m, n]) => m + " " + n + "표")
+              .join(". ") +
+            ". 지역 전체 통계는 아닙니다.",
+        );
+      }
+      function quickPage() {
+        const q = quickDraft || defaults();
+        const history = data.tables.filter((t) => t.own);
+        return `<button class="back" onclick="go('home')">← 처음으로</button><h2>지난 밥상, 다시 열까요?</h2><p class="muted">한 번 누르면 메뉴·장소·시간·인원을 가져와요.</p>${
+          history
+            .slice(0, 4)
+            .map(
+              (t) =>
+                `<button class="btn light" onclick="useHistory('${t.id}')">${esc(t.menu)}<br><small>${esc(t.venue)} · ${esc(t.time)}</small></button>`,
+            )
+            .join("") || "<p>아직 지난 밥상이 없어요.</p>"
+        }<div class="section">이번 약속만 확인해주세요</div><form onsubmit="publishQuick(event)"><label for="qmenu">함께 만들 집밥</label><input id="qmenu" value="${esc(q.menu)}" required placeholder="메뉴를 적거나 아래 음성 안내를 이용하세요"><label for="qvenue">공동장소</label><select id="qvenue">${VENUES.map((v) => `<option ${q.venue === v ? "selected" : ""}>${esc(v)}</option>`).join("")}</select><div class="grid2"><div><label for="qdate">날짜</label><input id="qdate" type="date" value="${esc(q.date)}" min="${tomorrow()}" required></div><div><label for="qtime">시간</label><input id="qtime" type="time" value="${esc(q.time)}" required></div></div><label for="qcapacity">청년 인원</label><select id="qcapacity">${[2, 3, 4].map((n) => `<option value="${n}" ${q.capacity === n ? "selected" : ""}>${n}명</option>`).join("")}</select><div class="notice">장소 예약·조리 가능 여부는 별도 확인해주세요. 신청한 청년의 알레르기를 조리 전에 확인합니다.</div><button class="btn accent">확인하고 모집글 올리기</button></form><button class="btn outline" onclick="startFlow('table')">입력 대신 말로 하나씩 정하기</button>${weatherPanel()}<button class="btn light" onclick="readWeather()">추천과 투표 결과 듣기</button>`;
+      }
+      function publishQuick(e) {
+        e.preventDefault();
+        retainQuick();
+        const q = quickDraft;
+        if (
+          !q.menu.trim() ||
+          !VENUES.includes(q.venue) ||
+          !valid(TABLE_STEPS[2], q.date) ||
+          q.date < tomorrow() ||
+          !valid(TABLE_STEPS[3], q.time) ||
+          ![2, 3, 4].includes(q.capacity)
+        )
+          return toast("메뉴와 내일 이후 날짜·장소·시간을 확인해주세요.");
+        if (
+          !confirm(
+            `${q.menu}\n${q.date} ${q.time}\n${q.venue}\n청년 ${q.capacity}명 모집, 이대로 올릴까요?`,
+          )
+        )
+          return;
+        data.tables.unshift({
+          id: "t" + Date.now(),
+          ...q,
+          menu: q.menu.trim(),
+          host: data.profile.nick,
+          intro: data.profile.intro,
+          members: [],
+          comments: [],
+          mine: false,
+          own: true,
+        });
+        save();
+        go("home");
+        speak("모집글을 올렸어요. 청년이 신청하면 소식으로 알려드릴게요.");
+      }
+      function birthdayKey() {
+        return role === "elder" ? "current-elder" : "current-youth";
+      }
+      function birthdayPanel() {
+        const b = data.birthdays[birthdayKey()] || {};
+        return `<div class="card"><h3>생일 소식 등록</h3><p class="muted">내 생일을 이웃에게 알리고 싶을 때만 등록해요.</p><form onsubmit="saveBirthday(event)"><label for="birthday">생일 · 양력 월/일</label><input id="birthday" type="date" value="${esc(b.date || "")}" required><p class="tiny">생년은 소식에 표시하지 않아요. 프로토타입은 입력한 날짜를 이 기기에 저장합니다.</p><label class="check"><input id="birthConsent" type="checkbox" ${b.consent ? "checked" : ""}><span>생일 당일 닉네임과 생일 소식을 공동체에 공개하는 데 동의해요.</span></label><button class="btn light">생일 등록·동의 저장</button></form><p class="tiny">현재는 본인 입력 등록입니다. 서류·본인인증을 통한 생일 인증은 연결되지 않았으며, 인증 완료 표시를 하지 않습니다.</p>${b.date ? '<button class="btn outline" onclick="deleteBirthday()">생일 정보 삭제하기</button>' : ""}</div>`;
+      }
+      function saveBirthday(e) {
+        e.preventDefault();
+        const date = $("birthday").value;
+        if (
+          !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+          isNaN(new Date(date).getTime()) ||
+          date > localToday()
+        )
+          return toast("올바른 생일을 입력해주세요.");
+        data.birthdays[birthdayKey()] = {
+          date,
+          consent: $("birthConsent").checked,
+        };
+        save();
+        render();
+        toast("생일과 공개 동의를 저장했어요. 생일 당일에만 소식에 나옵니다.");
+      }
+      function deleteBirthday() {
+        if (!confirm("생일 정보와 공개 동의를 삭제할까요?")) return;
+        delete data.birthdays[birthdayKey()];
+        save();
+        render();
+        toast("생일 정보를 삭제했습니다.");
+      }
+      function localToday() {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      }
+      function birthdayNotices() {
+        const md = localToday().slice(5);
+        return Object.entries(data.birthdays)
+          .filter(([k, b]) => b.consent && b.date?.slice(5) === md)
+          .map(([k]) => ({
+            text: `오늘은 ${k === "current-elder" ? data.profile.nick : "집밥친구"}님의 생일이에요. 따뜻한 축하 인사를 나눠주세요.`,
+          }));
+      }
+      const originalHome = home;
+      home = function () {
+        return originalHome() + (role === "youth" ? weatherPanel() : "");
+      };
+      const originalProfile = profile;
+      profile = function () {
+        return originalProfile() + birthdayPanel();
+      };
+      listenHome = function () {
+        const notes = [...birthdayNotices(), ...data.news];
+        speak(
+          notes.length
+            ? `오늘 소식 ${notes.length}개입니다. ` +
+                notes.map((n) => n.text).join(". ")
+            : "아직 새로운 소식이 없어요.",
+        );
+      };
+      newsPage = function () {
+        const birthdays = birthdayNotices();
+        return `<button class="btn light" onclick="listenHome()">모든 소식 들려줘요</button>${birthdays.map((n) => `<div class="note-item"><span class="tag">오늘의 생일</span><p>${esc(n.text)}</p><button class="btn" onclick="listenBirthdays()">생일 소식 듣기</button></div>`).join("")}${data.news.map((n, i) => `<div class="note-item"><p>${esc(n.text)}</p><button class="btn" onclick="readNews(${i})">이 소식 듣기</button></div>`).join("")}${!birthdays.length && !data.news.length ? '<p class="muted">아직 새로운 소식이 없습니다.</p>' : ""}`;
+      };
+      function listenBirthdays() {
+        speak(
+          birthdayNotices()
+            .map((n) => n.text)
+            .join(". ") || "오늘 공개에 동의한 생일 소식이 없습니다.",
+        );
+      }
+
+      render();
+    </script>
+  </body>
+</html>
